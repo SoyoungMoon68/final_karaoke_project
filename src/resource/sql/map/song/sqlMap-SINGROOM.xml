@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SINGROOMQuery">
+
+
+
+    <sql id="WhereQuery" >
+        
+    </sql>
+
+
+    <sql id="InlineViewQuery" >
+        <![CDATA[
+            SELECT
+                     STORE_ID      storeId
+                    ,STORE_NAME     storeName
+                    ,RUN_YMD        runYmd
+                    
+            FROM   SINGROOM
+
+               
+            WHERE  1 = 1
+        ]]>
+    </sql>
+
+
+    <!-- 관리자_그룹코드리스트조회 -->
+    <select id="selectSINGROOMList" parameterType="SINGROOMModel" resultType="SINGROOMModel" >
+        <include refid="Zcom00000Query.PagingTop" />
+        <include refid="InlineViewQuery" />
+        <include refid="WhereQuery" />
+        <![CDATA[
+            ORDER BY 
+                    STORE_ID                       
+        ]]>
+        <include refid="Zcom00000Query.PagingBottom" />
+    </select>
+
+    <!-- 관리자_그룹코드리스트수조회 -->
+    <select id="selectSINGROOMList_01" parameterType="SINGROOMModel" resultType="SINGROOMModel" >
+        <![CDATA[
+            SELECT
+                     COUNT(*) totCnt
+            FROM   (
+        ]]>
+        <include refid="InlineViewQuery"/>
+        <include refid="WhereQuery" />
+        <![CDATA[
+                   ) TOT
+        ]]>
+    </select>
+
+
+    <!-- 관리자_그룹코드조회 -->
+    <select id="selectSINGROOMList_02" parameterType="SINGROOMModel" resultType="SINGROOMModel" >
+        <include refid="InlineViewQuery" />
+        <![CDATA[
+            AND    ZCOM99010.GRP_CD                         = #{grpCd}                          /* 그룹 코드                      */
+        ]]>
+    </select>
+
+
+    <!-- 관리자_그룹코드등록 -->
+    <insert id="insertSINGROOM" parameterType="SINGROOMModel" >
+        <![CDATA[
+            INSERT INTO SINGROOM
+            (
+                     STORE_ID
+                    ,STORE_NAME
+                    ,RUN_YMD                          /* 수정 일시                      */
+            ) VALUES (
+                     #{storeId}                          /* 그룹 코드                      */
+                   , #{storeName}                        /* 그룹 코드 명                   */
+                   , #{runYmd}                       /* 그룹 코드 내용                 */
+                                           /* 수정 일시                      */
+            )
+        ]]>
+    </insert>
+
+
+    <!-- 관리자_그룹코드수정 -->
+    <update id="updateSINGROOM" parameterType="SINGROOMModel" >
+        <![CDATA[
+            UPDATE SINGROOM SET
+                     STORE_ID					  = #{storeId}
+                    ,STORE_NAME					  = #{storeName}
+                    ,RUN_YMD                      = #{runYmd}                         /* 수정 일시                      */
+            WHERE   STORE_ID = #{storeId}                              
+        ]]>
+    </update>
+
+
+    <!-- 관리자_그룹코드삭제 -->
+    <delete id="deleteSINGROOM" parameterType="SINGROOMModel" >
+        <![CDATA[
+            DELETE FROM SINGROOM
+            WHERE  STORE_ID = #{storeId}
+                   
+        ]]>
+    </delete>
+
+
+
+</mapper>
